@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Sidebar</title>
+    <!-- Include Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed inset-0 z-20 bg-gray-800 bg-opacity-75 md:hidden">
+        <div class="flex justify-end p-4">
+            <button id="closeSidebar" class="text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col items-center space-y-4 text-white py-12">
+            <a href="#" class="text-xl">Home</a>
+            <a href="#" class="text-xl">About</a>
+            <a href="#" class="text-xl">Services</a>
+            <a href="#" class="text-xl">Contact</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="md:flex min-h-screen">
+        <!-- Sidebar Toggle Button for Small Screens -->
+        <button id="openSidebar" class="md:hidden p-4 bg-gray-800 text-white rounded-full fixed top-4 left-4 z-30">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Sidebar for Larger Screens (Always visible) -->
+        <div class="w-64 bg-gray-800 text-white hidden md:block">
+            <div class="flex flex-col items-center py-12 space-y-4">
+                <a href="#" class="text-xl">Home</a>
+                <a href="#" class="text-xl">About</a>
+                <a href="#" class="text-xl">Services</a>
+                <a href="#" class="text-xl">Contact</a>
+            </div>
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="flex-1 p-8">
+            <h1 class="text-3xl font-semibold text-gray-800">Welcome to the Responsive Sidebar</h1>
+            <p class="text-lg text-gray-700 mt-4">
+                This page has a responsive sidebar that adapts to different screen sizes. On mobile or small screens, the sidebar can be toggled on and off using the button. On larger screens, it is always visible.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Get the sidebar and buttons
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('openSidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+
+        // Open the sidebar when the button is clicked
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('hidden');
+        });
+
+        // Close the sidebar when the close button is clicked
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

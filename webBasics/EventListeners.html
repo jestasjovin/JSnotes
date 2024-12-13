@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Listeners with Options</title>
+</head>
+<body>
+    <button id="myButton">Click Me</button>
+    <div id="myDiv" style="width: 100px; height: 100px; background: lightblue; margin-top: 20px;">Hover Me</div>
+    <script>
+        const button = document.getElementById('myButton');
+        const div = document.getElementById('myDiv');
+
+        // Example with `{ once: true }`
+        button.addEventListener('click', () => {
+            alert('Button clicked! This will run only once.');
+        }, { once: true });
+
+        // Example with `{ capture: true }`
+        document.body.addEventListener(
+            'click',
+            () => {
+                console.log('Body clicked during capture phase!');
+            },
+            { capture: true }
+        );
+
+        // Example with `{ passive: true }`
+        div.addEventListener(
+            'mouseover',
+            () => {
+                console.log('Hovered over the div!');
+            },
+            { passive: true }
+        );
+
+        // Example with removeEventListener
+        function removeListener() {
+            alert('Listener removed!');
+            div.removeEventListener('mouseout', removeListener);
+        }
+
+        div.addEventListener('mouseout', removeListener);
+    </script>
+</body>
+</html>
+
+
+<!-- 
+What Are Event Listeners?
+Event listeners let you attach JavaScript functions to HTML elements without adding inline attributes like onclick. This approach is cleaner and more flexible.
+
+
+element.addEventListener(event, function, options);
+
+event: The event name (e.g., 'click', 'mouseover').
+function: The callback function to run when the event is triggered.
+options: Optional settings like { once: true } (runs the listener only once).
+
+Key Benefits of Event Listeners:
+Allows multiple listeners for the same event.
+Separates JavaScript from HTML for cleaner code.
+Dynamically add/remove listeners as needed.
+
+
+
+Event Listener Options Explained:
+once: true: The listener is automatically removed after it’s triggered once.
+capture: true: The event is handled in the capturing phase instead of the bubbling phase.
+passive: true: The listener will never call preventDefault(), improving performance for scroll and touch events.
+Test these options and see how they behave!
+
+
+-->

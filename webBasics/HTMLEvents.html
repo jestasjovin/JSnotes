@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Tester Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        div {
+            margin-bottom: 20px;
+        }
+        button, input {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event Tester Page</h1>
+    <p>Event attributes are not restricted to buttons; they can be used on almost any HTML element, including div, span, img, and more.</p>
+
+    <div>
+        <h3>Mouse Events</h3>
+        <button onclick="showAlert('Click')">Click Me</button>
+        <button ondblclick="showAlert('Double Click')">Double Click Me</button>
+        <button onmouseover="showAlert('Mouse Over')">Hover Over Me</button>
+        <button onmouseout="showAlert('Mouse Out')">Move Out of Me</button>
+    </div>
+
+    <div>
+        <h3>Keyboard Events</h3>
+        <input type="text" onkeydown="showAlert('Key Down')" placeholder="Press any key">
+        <input type="text" onkeyup="showAlert('Key Up')" placeholder="Release a key">
+    </div>
+
+    <div>
+        <h3>Form Events</h3>
+        <input type="text" onchange="showAlert('Value Changed')" placeholder="Change me">
+        <form onsubmit="showAlert('Form Submitted'); return false;">
+            <button type="submit">Submit Form</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>Window Events</h3>
+        <button onclick="resizeWindow()">Resize Window</button>
+    </div>
+
+    <script>
+        function showAlert(eventName) {
+            alert(eventName + ' event triggered!');
+        }
+
+        function resizeWindow() {
+            alert('Try resizing the window to trigger onresize event!');
+            window.onresize = function() {
+                alert('Window resized!');
+            };
+        }
+
+        // Scroll event example
+        window.onscroll = function() {
+            console.log('Scrolled the page!');
+        };
+    </script>
+</body>
+</html>

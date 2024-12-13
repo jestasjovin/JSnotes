@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Listeners Advanced</title>
+  </head>
+  <body>
+    <ul id="parentList">
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+    <script>
+      const parentList = document.getElementById("parentList");
+      parentList.addEventListener("click", (event) => {
+        if (event.target.tagName === "LI") {
+          alert(`You clicked on: ${event.target.textContent}`);
+        }
+      });
+    </script>
+
+    <button id="myButton">Click Me</button>
+    <script>
+      const button = document.getElementById("myButton");
+
+      function handleClick() {
+        alert("Button clicked!");
+        button.removeEventListener("click", handleClick);
+      }
+
+      button.addEventListener("click", handleClick);
+    </script>
+
+    <div id="myDiv">Click me to trigger custom event</div>
+    <script>
+      const div = document.getElementById("myDiv");
+
+      // Custom event
+      const customEvent = new CustomEvent("customEvent", {
+        detail: { message: "Hello from custom event!" },
+      });
+
+      div.addEventListener("customEvent", (e) => {
+        alert(e.detail.message);
+      });
+
+      div.addEventListener("click", () => {
+        div.dispatchEvent(customEvent);
+      });
+    </script>
+
+    <div id="parent" style="padding: 20px; background: lightblue">
+      Parent
+      <div id="child" style="padding: 20px; background: lightcoral">Child</div>
+    </div>
+    <script>
+      document
+        .getElementById("parent")
+        .addEventListener(
+          "click",
+          () => console.log("Parent clicked (capturing)"),
+          { capture: true }
+        );
+
+      document
+        .getElementById("child")
+        .addEventListener("click", () => console.log("Child clicked"));
+    </script>
+
+    <div id="outer" style="padding: 20px; background: lightblue">
+      Outer Div
+      <div id="inner" style="padding: 20px; background: lightcoral">
+        Inner Div
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("outer")
+        .addEventListener("click", () => console.log("Outer clicked"));
+
+      document.getElementById("inner").addEventListener("click", (event) => {
+        console.log("Inner clicked");
+        event.stopPropagation(); // Stops Outer from being logged
+      });
+    </script>
+
+    <script>
+      function debounce(func, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+
+      window.addEventListener(
+        "resize",
+        debounce(() => {
+          console.log("Window resized!");
+        }, 300)
+      );
+
+      document.addEventListener(
+        "scroll",
+        () => {
+          console.log("Scrolling!");
+        },
+        { passive: true }
+      );
+    </script>
+  </body>
+</html>
+
+<!-- 
+ Some advanced concepts and practices related to **Event Listeners**:
+
+---
+
+### 1. **Event Delegation**
+Instead of attaching listeners to multiple child elements, you can attach a single listener to their parent and use `event.target` to identify the clicked element.
+
+#### Example:
+```html
+<ul id="parentList">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+<script>
+    const parentList = document.getElementById('parentList');
+    parentList.addEventListener('click', (event) => {
+        if (event.target.tagName === 'LI') {
+            alert(`You clicked on: ${event.target.textContent}`);
+        }
+    });
+</script>
+```
+
+**Why Use It?** Efficient for dynamic or large lists of elements.
+
+---
+
+### 2. **Removing Event Listeners**
+To remove an event listener, you must use a **named function**. Anonymous functions cannot be removed.
+
+#### Example:
+```html
+<button id="myButton">Click Me</button>
+<script>
+    const button = document.getElementById('myButton');
+
+    function handleClick() {
+        alert('Button clicked!');
+        button.removeEventListener('click', handleClick);
+    }
+
+    button.addEventListener('click', handleClick);
+</script>
+```
+
+---
+
+### 3. **Custom Events**
+You can create and dispatch your own custom events.
+
+#### Example:
+```html
+<div id="myDiv">Click me to trigger custom event</div>
+<script>
+    const div = document.getElementById('myDiv');
+
+    // Custom event
+    const customEvent = new CustomEvent('customEvent', {
+        detail: { message: 'Hello from custom event!' },
+    });
+
+    div.addEventListener('customEvent', (e) => {
+        alert(e.detail.message);
+    });
+
+    div.addEventListener('click', () => {
+        div.dispatchEvent(customEvent);
+    });
+</script>
+```
+
+---
+
+### 4. **Using `once` and Manual Removal Together**
+Even if `once: true` is used, you can still manually remove an event listener before it executes.
+
+---
+
+### 5. **Event Listener Priority (Capture vs. Bubble Phase)**
+- **Capturing phase**: Events are handled from the root to the target.
+- **Bubbling phase**: Events are handled from the target to the root.
+Set `{ capture: true }` to handle the event during the capturing phase.
+
+#### Example:
+```html
+<div id="parent" style="padding: 20px; background: lightblue;">
+    Parent
+    <div id="child" style="padding: 20px; background: lightcoral;">Child</div>
+</div>
+<script>
+    document.getElementById('parent').addEventListener(
+        'click',
+        () => console.log('Parent clicked (capturing)'),
+        { capture: true }
+    );
+
+    document.getElementById('child').addEventListener('click', () =>
+        console.log('Child clicked')
+    );
+</script>
+```
+
+---
+
+### 6. **Throttling and Debouncing Event Listeners**
+Use these techniques to improve performance when events like `scroll` or `resize` trigger frequently.
+
+#### Example (Debouncing):
+```javascript
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+window.addEventListener(
+    'resize',
+    debounce(() => {
+        console.log('Window resized!');
+    }, 300)
+);
+```
+
+---
+
+### 7. **Passive Event Listeners for Performance**
+Use `{ passive: true }` to improve performance for events like `scroll` or `touchstart`.
+
+#### Example:
+```javascript
+document.addEventListener(
+    'scroll',
+    () => {
+        console.log('Scrolling!');
+    },
+    { passive: true }
+);
+```
+
+---
+
+### 8. **Stopping Event Propagation**
+Use `stopPropagation()` to stop the event from propagating further in the DOM.
+
+#### Example:
+```html
+<div id="outer" style="padding: 20px; background: lightblue;">
+    Outer Div
+    <div id="inner" style="padding: 20px; background: lightcoral;">Inner Div</div>
+</div>
+<script>
+    document.getElementById('outer').addEventListener('click', () =>
+        console.log('Outer clicked')
+    );
+
+    document.getElementById('inner').addEventListener('click', (event) => {
+        console.log('Inner clicked');
+        event.stopPropagation(); // Stops Outer from being logged
+    });
+</script>
+```
+
+---
+
+
+-->

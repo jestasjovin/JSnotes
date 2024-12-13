@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User List</title>
+    <style>
+        .user-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .user-card.active {
+            background-color: #d4ffd8; /* Light green for active users */
+        }
+        .user-card.inactive {
+            background-color: #ffd4d4; /* Light red for inactive users */
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .active-dot {
+            background-color: green;
+        }
+        .inactive-dot {
+            background-color: red;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info span {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>User List</h1>
+    <div id="user-list"></div>
+
+    <script>
+        // Sample data representing users
+        const users = [
+            { name: 'Alice', active: true, age: 25, createdAt: '2023-02-01T10:00:00Z' },
+            { name: 'Bob', active: false, age: 30, createdAt: '2022-05-12T15:30:00Z' },
+            { name: 'Charlie', active: true, age: 35, createdAt: '2021-08-22T09:15:00Z' },
+        ];
+
+        // Function to format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString(); // You can format it as per your needs
+        }
+
+        // Render users
+        function renderUsers() {
+            const userListElement = document.getElementById('user-list');
+            userListElement.innerHTML = ''; // Clear any existing content
+
+            users.forEach(user => {
+                // Create the user card
+                const userCard = document.createElement('div');
+                userCard.classList.add('user-card');
+                userCard.classList.add(user.active ? 'active' : 'inactive');
+
+                // User info (name, age, status)
+                const userInfo = document.createElement('div');
+                userInfo.classList.add('user-info');
+
+                const nameElement = document.createElement('span');
+                nameElement.innerText = user.name;
+
+                const ageElement = document.createElement('span');
+                ageElement.innerText = `Age: ${user.age}`;
+
+                const statusDot = document.createElement('span');
+                statusDot.classList.add('status-dot', user.active ? 'active-dot' : 'inactive-dot');
+                
+                const createdAtElement = document.createElement('span');
+                createdAtElement.innerText = `Joined: ${formatDate(user.createdAt)}`;
+
+                userInfo.appendChild(nameElement);
+                userInfo.appendChild(ageElement);
+                userInfo.appendChild(statusDot);
+                userInfo.appendChild(createdAtElement);
+
+                // Action Button
+                const actionButton = document.createElement('button');
+                actionButton.innerText = 'View Details';
+                actionButton.onclick = () => handleButtonClick(user);
+
+                // Append everything to the user card
+                userCard.appendChild(userInfo);
+                userCard.appendChild(actionButton);
+
+                // Add user card to the list
+                userListElement.appendChild(userCard);
+            });
+        }
+
+        // Handle button click (navigate or open modal)
+        function handleButtonClick(user) {
+            alert(`User ${user.name} clicked!`);
+            // You can replace the alert with navigation or modal opening code:
+            // For example, window.location.href = `/user/${user.name}`;
+            // Or open a modal to show more details about the user.
+        }
+
+        // Initial render
+        renderUsers();
+    </script>
+
+</body>
+</html>
